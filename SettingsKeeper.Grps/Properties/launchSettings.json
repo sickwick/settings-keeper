@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "SettingsKeeper.Grps": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5219;https://localhost:7142",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
