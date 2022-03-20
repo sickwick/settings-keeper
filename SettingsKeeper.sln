@@ -1,12 +1,18 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Grps", "SettingsKeeper.Grps\SettingsKeeper.Grps.csproj", "{7748AB5F-CCB8-4F7C-9617-B82ADC98026C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Grps", "src\SettingsKeeper.Grps\SettingsKeeper.Grps.csproj", "{7748AB5F-CCB8-4F7C-9617-B82ADC98026C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Api", "SettingsKeeper.Api\SettingsKeeper.Api.csproj", "{128CA4EC-A6BA-4004-A618-A40CCAED71B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Api", "src\SettingsKeeper.Api\SettingsKeeper.Api.csproj", "{128CA4EC-A6BA-4004-A618-A40CCAED71B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Core", "SettingsKeeper.Core\SettingsKeeper.Core.csproj", "{55074C75-8B34-42CB-B2B3-AD08F80FA7DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Core", "src\SettingsKeeper.Core\SettingsKeeper.Core.csproj", "{55074C75-8B34-42CB-B2B3-AD08F80FA7DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Config", "SettingsKeeper.Config\SettingsKeeper.Config.csproj", "{A58447A8-8F82-4B1C-B1F1-6E951955F60A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsKeeper.Config", "src\SettingsKeeper.Config\SettingsKeeper.Config.csproj", "{A58447A8-8F82-4B1C-B1F1-6E951955F60A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3149370B-17FE-4640-ABB2-4CE2342A2F29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingKeeper.Tests", "tests\SettingKeeper.Tests\SettingKeeper.Tests.csproj", "{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{82E716B3-E8EA-4A30-851D-46619558E1AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +36,16 @@ Global
 		{A58447A8-8F82-4B1C-B1F1-6E951955F60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A58447A8-8F82-4B1C-B1F1-6E951955F60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A58447A8-8F82-4B1C-B1F1-6E951955F60A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{128CA4EC-A6BA-4004-A618-A40CCAED71B9} = {3149370B-17FE-4640-ABB2-4CE2342A2F29}
+		{A58447A8-8F82-4B1C-B1F1-6E951955F60A} = {3149370B-17FE-4640-ABB2-4CE2342A2F29}
+		{55074C75-8B34-42CB-B2B3-AD08F80FA7DF} = {3149370B-17FE-4640-ABB2-4CE2342A2F29}
+		{7748AB5F-CCB8-4F7C-9617-B82ADC98026C} = {3149370B-17FE-4640-ABB2-4CE2342A2F29}
+		{2E08D2C0-1058-4E1D-94F6-3B0DB38DD014} = {82E716B3-E8EA-4A30-851D-46619558E1AB}
 	EndGlobalSection
 EndGlobal
