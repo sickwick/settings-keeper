@@ -2,9 +2,9 @@ namespace SettingsKeeper.Cache.Abstract;
 
 public interface ISettingsKeeperCacheProvider
 {
-    Task<string> GetAsync(string cacheKey, CancellationToken cancellationToken);
+    Task<string> GetAsync(string cacheKey);
 
-    Task SetAsync<T>(string cacheKey, T data, CancellationToken cancellationToken) where T: class;
+    Task SetAsync<T>(string cacheKey, T data) where T: class;
 
-    Task RemoveAsync(string cacheKey, CancellationToken cancellationToken);
+    Task<bool> RemoveAsync(string cacheKey);
 }

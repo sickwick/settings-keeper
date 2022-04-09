@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SettingsKeeper.Api.Models;
+using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
 
 namespace SettingsKeeper.Api.Controllers;
@@ -9,36 +10,42 @@ namespace SettingsKeeper.Api.Controllers;
 public class SettingsController:ControllerBase
 {
     private readonly ISettingsService _settingsService;
+    private readonly ISettingsKeeperCacheProvider _cacheProvider;
 
-    public SettingsController(ISettingsService settingsService)
+    public SettingsController(ISettingsService settingsService, ISettingsKeeperCacheProvider cacheProvider)
     {
         _settingsService = settingsService;
-    }
-    
-    [HttpPost]
-    public IActionResult CreateFeatureToogle([FromBody] FeatureToogle featureToogle)
-    {
-        return NoContent();
+        _cacheProvider = cacheProvider;
     }
 
     [HttpGet]
     [Route("{name}")]
-    public IActionResult GetFeatureToogle(string name)
+    public async Task<IActionResult> GetSetting(string name)
+    {
+        await _cacheProvider.SetAsync(name, $"{name}-{name}");
+        var res = await _cacheProvider.GetAsync(name);
+        return Ok(res);
+    }
+    
+    [HttpPost]
+    [Route("{name}")]
+    public IActionResult AddSetting([FromBody] string settings)
     {
         return Ok();
     }
     
     [HttpPut]
     [Route("{name}")]
-    public IActionResult EditFeatureToogle(string name)
+    public IActionResult EditSetting([FromBody] string settings)
     {
         return Ok();
     }
     
     [HttpDelete]
     [Route("{name}")]
-    public IActionResult DeleteFeatureToogle(string name)
+    public async Task<IActionResult> DeleteSetting(string name)
     {
-        return Ok();
+        var res = await _cacheProvider.RemoveAsync(name);
+        return Ok(res);
     }
 }
