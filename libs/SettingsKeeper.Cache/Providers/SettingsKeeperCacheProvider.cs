@@ -5,7 +5,7 @@ using StackExchange.Redis;
 
 namespace SettingsKeeper.Cache.Providers;
 
-public class SettingsKeeperCacheProvider: ISettingsKeeperCacheProvider
+public class SettingsKeeperCacheProvider: IRedisProvider
 {
     private readonly IDatabase _database;
     private const int DefaultCacheLifeTime = 8;
@@ -14,9 +14,11 @@ public class SettingsKeeperCacheProvider: ISettingsKeeperCacheProvider
     {
         _database = database;
     }
-    public async Task<string> GetAsync(string cacheKey)
+    public async Task<T> GetAsync<T>(string cacheKey)
     {
-        return await _database.StringGetAsync(cacheKey);
+        var data = await _database.StringGetAsync(cacheKey);
+        var encodedData = Encoding.UTF8.GetString(data);
+        return JsonConvert.DeserializeObject<T>(data);
     }
 
     public async Task SetAsync<T>(string cacheKey, T data)

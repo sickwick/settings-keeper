@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\libs\SettingsKeeper.Cache\SettingsKeeper.Cache.csproj" />
-      <ProjectReference Include="..\SettingsKeeper.Provider\SettingsKeeper.Provider.csproj" />
+      <Folder Include="Extensions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\libs\SettingsKeeper.MongoDb\SettingsKeeper.MongoDb.csproj" />
     </ItemGroup>
 
 </Project>

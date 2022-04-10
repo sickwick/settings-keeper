@@ -19,7 +19,7 @@ public static class ServiceCollectionExtension
             var options = provider.GetRequiredService<IOptions<RedisSettings>>();
             return CreateRedisConnector(options);
         });
-        services.AddSingleton<ISettingsKeeperCacheProvider, SettingsKeeperCacheProvider>();
+        services.AddSingleton<IRedisProvider, SettingsKeeperCacheProvider>();
         return services;
     }
 

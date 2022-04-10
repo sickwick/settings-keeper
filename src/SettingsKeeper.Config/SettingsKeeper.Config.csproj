@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SettingsKeeper.Core\SettingsKeeper.Core.csproj" />
+      <ProjectReference Include="..\SettingsKeeper.Provider\SettingsKeeper.Provider.csproj" />
     </ItemGroup>
 
 </Project>

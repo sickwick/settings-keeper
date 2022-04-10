@@ -1,8 +1,8 @@
 namespace SettingsKeeper.Cache.Abstract;
 
-public interface ISettingsKeeperCacheProvider
+public interface IRedisProvider
 {
-    Task<string> GetAsync(string cacheKey);
+    Task<T> GetAsync<T>(string cacheKey);
 
     Task SetAsync<T>(string cacheKey, T data) where T: class;
 

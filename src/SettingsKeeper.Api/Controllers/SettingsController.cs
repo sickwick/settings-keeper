@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using SettingsKeeper.Api.Models;
 using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
 using SettingsKeeper.MongoDb.Abstract;
-using SettingsKeeper.MongoDb.Models;
 
 namespace SettingsKeeper.Api.Controllers;
 
@@ -13,12 +10,12 @@ namespace SettingsKeeper.Api.Controllers;
 public class SettingsController:ControllerBase
 {
     private readonly ISettingsService _settingsService;
-    private readonly ISettingsKeeperCacheProvider _cacheProvider;
+    private readonly IRedisProvider _cacheProvider;
     private readonly IMongoDbProvider _mongoDbProvider;
 
     public SettingsController(
         ISettingsService settingsService, 
-        ISettingsKeeperCacheProvider cacheProvider,
+        IRedisProvider cacheProvider,
         IMongoDbProvider mongoDbProvider)
     {
         _settingsService = settingsService;
@@ -28,12 +25,9 @@ public class SettingsController:ControllerBase
 
     [HttpGet]
     [Route("{name}")]
-    public async Task<IActionResult> GetSetting(string name,[FromServices] IOptions<MongoSettings> mongo)
+    public async Task<IActionResult> GetSetting(string name)
     {
-        await _cacheProvider.SetAsync(name, $"{name}-{name}");
-        var res = await _cacheProvider.GetAsync(name);
-        var db = _mongoDbProvider.GetMongoClient(mongo);
-        return Ok(res);
+        return Ok();
     }
     
     [HttpPost]
