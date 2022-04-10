@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\libs\SettingsKeeper.Cache\SettingsKeeper.Cache.csproj" />
+      <ProjectReference Include="..\..\libs\SettingsKeeper.MongoDb\SettingsKeeper.MongoDb.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Config\SettingsKeeper.Config.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Core\SettingsKeeper.Core.csproj" />
     </ItemGroup>

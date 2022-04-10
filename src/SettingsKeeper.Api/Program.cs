@@ -1,17 +1,21 @@
 using SettingsKeeper.Cache.Extensions;
 using SettingsKeeper.Config;
+using SettingsKeeper.MongoDb.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+IConfiguration configuration = builder.Configuration;
+IServiceCollection services = builder.Services;
 // Add services to the container.
-
-builder.Services.AddControllers();
+services.AddOptions();
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSettingsKeeperCache();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+services.AddSettingsKeeperCache(configuration);
+services.AddMongoDb(configuration);
 
-builder.Services.AddApplicationServices();
+services.AddApplicationServices();
 
 var app = builder.Build();
 
