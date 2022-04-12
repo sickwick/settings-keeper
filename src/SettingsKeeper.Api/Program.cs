@@ -2,6 +2,7 @@ using SettingsKeeper.Cache.Extensions;
 using SettingsKeeper.Config;
 using SettingsKeeper.MongoDb.Extensions;
 using SettingsKeeper.Provider.Models;
+using SettingsKeeper.RabbitMQ.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddSettingsKeeperCache(configuration);
 services.AddMongoDb(configuration);
+services.AddRabbitMq(configuration);
 
 services.AddApplicationServices();
 
@@ -29,8 +31,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseExceptionHandler();
 
 // app.UseHttpsRedirection();
 //

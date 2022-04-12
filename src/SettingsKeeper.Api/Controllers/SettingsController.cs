@@ -1,7 +1,10 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Client;
 using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
 using SettingsKeeper.MongoDb.Abstract;
+using SettingsKeeper.RabbitMQ.Abstract;
 
 namespace SettingsKeeper.Api.Controllers;
 
@@ -16,7 +19,8 @@ public class SettingsController:ControllerBase
     public SettingsController(
         ISettingsService settingsService, 
         IRedisProvider cacheProvider,
-        IMongoDbProvider mongoDbProvider)
+        IMongoDbProvider mongoDbProvider,
+        IRabbitMqService rabbitMqService)
     {
         _settingsService = settingsService;
         _cacheProvider = cacheProvider;

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\libs\SettingsKeeper.Cache\SettingsKeeper.Cache.csproj" />
+      <ProjectReference Include="..\..\libs\SettingsKeeper.RabbitMQ\SettingsKeeper.RabbitMQ.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Provider\SettingsKeeper.Provider.csproj" />
     </ItemGroup>
 

@@ -7,12 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\libs\SettingsKeeper.Cache\SettingsKeeper.Cache.csproj" />
       <ProjectReference Include="..\..\libs\SettingsKeeper.MongoDb\SettingsKeeper.MongoDb.csproj" />
+      <ProjectReference Include="..\..\libs\SettingsKeeper.RabbitMQ\SettingsKeeper.RabbitMQ.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Config\SettingsKeeper.Config.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Core\SettingsKeeper.Core.csproj" />
       <ProjectReference Include="..\SettingsKeeper.Provider\SettingsKeeper.Provider.csproj" />

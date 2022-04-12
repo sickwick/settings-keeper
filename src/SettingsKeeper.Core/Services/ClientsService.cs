@@ -1,0 +1,52 @@
+using Microsoft.Extensions.Logging;
+using SettingsKeeper.Cache.Abstract;
+using SettingsKeeper.RabbitMQ.Abstract;
+
+namespace SettingsKeeper.Core.Services;
+
+public class ClientsService
+{
+    private readonly IRabbitMqService _rabbitMqService;
+    private readonly IRedisProvider _redisProvider;
+    private readonly ILogger _logger;
+    private const string REDIS_CLIENTS_KEY = "clients";
+
+    public ClientsService(IRabbitMqService rabbitMqService, IRedisProvider redisProvider, ILogger<ClientsService> logger)
+    {
+        _rabbitMqService = rabbitMqService;
+        _redisProvider = redisProvider;
+        _logger = logger;
+    }
+
+    public async Task AddNewClient(string name)
+    {
+        var clients = await _redisProvider.GetAsync<List<string>>(REDIS_CLIENTS_KEY);
+        if (clients?.Count == 0)
+        {
+            clients = new List<string>();
+        }
+
+        if (clients?.Any(c => c.Equals(name)) == true)
+            throw new Exception("Пользователь с таким именем уже существует");
+        
+        clients.Add(name);
+    }
+
+    public void SendMessageToClient<T>(string name, T message)
+    where T: class
+    {
+        _rabbitMqService.SendMessage(name, message);
+    }
+    
+    public async Task SendMessageToAllClients<T>(T message)
+        where T: class
+    {
+        var clients = await _redisProvider.GetAsync<List<string>>(REDIS_CLIENTS_KEY);
+        if (clients?.Count == 0)
+            throw new Exception("В список не добавлено ни одного пользователя");
+        
+        foreach(var client in clients)
+            SendMessageToClient(client, message);
+
+    }
+}
