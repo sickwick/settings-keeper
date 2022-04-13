@@ -17,6 +17,8 @@ public class SettingsKeeperCacheProvider: IRedisProvider
     public async Task<T> GetAsync<T>(string cacheKey)
     {
         var data = await _database.StringGetAsync(cacheKey);
+        if ((byte[])data is null)
+            return default;
         var encodedData = Encoding.UTF8.GetString(data);
         return JsonConvert.DeserializeObject<T>(data);
     }

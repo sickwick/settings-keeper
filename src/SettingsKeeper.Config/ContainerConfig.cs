@@ -13,6 +13,7 @@ public static class ContainerConfig
         services.AddSingleton<IFeatureToogleService, FeatureToogleService>();
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IFeatureToogleProvider, FeatureToogleProvider>();
+        services.AddSingleton<IClientsService, ClientsService>();
 
         return services;
     }

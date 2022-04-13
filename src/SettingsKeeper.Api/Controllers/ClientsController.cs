@@ -1,8 +1,5 @@
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using SettingsKeeper.RabbitMQ.Abstract;
+using SettingsKeeper.Core.Abstract;
 
 namespace SettingsKeeper.Api.Controllers;
 
@@ -10,24 +7,25 @@ namespace SettingsKeeper.Api.Controllers;
 [Route("[controller]")]
 public class ClientsController: ControllerBase
 {
-    private readonly IRabbitMqService _rabbitMqService;
+    private readonly IClientsService _clientsService;
 
-    public ClientsController(IRabbitMqService rabbitMqService)
+    public ClientsController(IClientsService clientsService)
     {
-        _rabbitMqService = rabbitMqService;
+        _clientsService = clientsService;
     }
 
     [HttpGet]
-    public IActionResult GetAllClients()
+    public async Task<IActionResult> GetAllClients()
     {
-        return NoContent();
+        var result = await _clientsService.GetAllClients();
+        return Ok(result);
     }
 
     [HttpGet]
-    [Route("name")]
+    [Route("{name}")]
     public IActionResult RegisterClient(string name)
     {
-        _rabbitMqService.CreateNewRabbitQueue(name);
+        _clientsService.AddNewClient(name);
         return Ok();
     }
 
@@ -35,7 +33,7 @@ public class ClientsController: ControllerBase
     [Route("message")]
     public IActionResult SendMessageToClient([FromQuery] string name, [FromQuery] string message)
     {
-        _rabbitMqService.SendMessage(name, message);
-        return Ok();
+        _clientsService.SendMessageToClient(name, message);
+        return NoContent();
     }
 }

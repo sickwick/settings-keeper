@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using SettingsKeeper.Cache.Abstract;
+using SettingsKeeper.Core.Abstract;
 using SettingsKeeper.RabbitMQ.Abstract;
 
 namespace SettingsKeeper.Core.Services;
 
-public class ClientsService
+public class ClientsService: IClientsService
 {
     private readonly IRabbitMqService _rabbitMqService;
     private readonly IRedisProvider _redisProvider;
@@ -18,18 +19,26 @@ public class ClientsService
         _logger = logger;
     }
 
+    public async Task<IEnumerable<string>> GetAllClients()
+    {
+        var clients = await _redisProvider.GetAsync<List<string>>(REDIS_CLIENTS_KEY);
+        if (clients is null || clients?.Count == 0)
+            clients = new List<string>();
+        return clients.ToList();
+    }
+
     public async Task AddNewClient(string name)
     {
         var clients = await _redisProvider.GetAsync<List<string>>(REDIS_CLIENTS_KEY);
-        if (clients?.Count == 0)
-        {
+        if (clients is null || clients?.Count == 0)
             clients = new List<string>();
-        }
 
         if (clients?.Any(c => c.Equals(name)) == true)
             throw new Exception("Пользователь с таким именем уже существует");
         
         clients.Add(name);
+        await _redisProvider.SetAsync(REDIS_CLIENTS_KEY, clients);
+        _rabbitMqService.CreateNewRabbitQueue(name);
     }
 
     public void SendMessageToClient<T>(string name, T message)
