@@ -1,5 +1,4 @@
 using System.Text;
-using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -9,28 +8,32 @@ using SettingsKeeper.RabbitMQ.Models;
 
 namespace SettingsKeeper.RabbitMQ.Services;
 
-public class RabbitMqService : IRabbitMqService
+public class RabbitMqService : IRabbitMqService, IDisposable
 {
     private readonly ILogger _logger;
     private readonly RabbitOptions _options;
+    private IConnection _connection;
+    private IModel _channel;
 
     public RabbitMqService(ILogger<RabbitMqService> logger,
         IOptions<RabbitOptions> options)
     {
         _logger = logger;
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        var factory = new ConnectionFactory { HostName = _options.HostName };
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
+        _declaredQueue = new HashSet<string>();
     }
+
+    private HashSet<string> _declaredQueue;
 
     public void CreateNewRabbitQueue(string queueName)
     {
-        var factory = new ConnectionFactory() { HostName = _options.HostName };
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
-        channel.QueueDeclare(queue: queueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
+        if (_declaredQueue.Contains(queueName))
+            throw new Exception("Очередь уже существует");
+        _channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+        _declaredQueue.Add(queueName);
 
         _logger.LogInformation($"Create queue for {queueName}");
     }
@@ -38,24 +41,24 @@ public class RabbitMqService : IRabbitMqService
     public void SendMessage<T>(string queueName, T message)
         where T : class
     {
-        var factory = new ConnectionFactory() { HostName = _options.HostName };
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
         var data = JsonConvert.SerializeObject(message);
         var body = Encoding.UTF8.GetBytes(data);
-        
-        channel.QueueDeclare(queue: queueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
 
-        channel.BasicPublish(exchange: "",
+        if(!_declaredQueue.Contains(queueName))
+            CreateNewRabbitQueue(queueName);
+
+        _channel.BasicPublish(exchange: "",
             routingKey: queueName,
             mandatory: false,
             basicProperties: null,
             body: body);
 
         _logger.LogInformation($"Send message to {queueName}");
+    }
+
+    public void Dispose()
+    {
+        _channel.Close();
+        _connection.Close();
     }
 }

@@ -20,7 +20,7 @@ public class ClientsController: ControllerBase
     [HttpGet]
     public IActionResult GetAllClients()
     {
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet]

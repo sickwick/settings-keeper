@@ -13,4 +13,9 @@ public static class ServiceCollectionExtension
         services.Configure<RabbitOptions>(configuration.GetSection("Rabbit"));
         services.AddSingleton<IRabbitMqService, RabbitMqService>();
     }
+
+    public static void AddRabbitMqForClient(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<RabbitClientOptions>(configuration.GetSection("RabbitClient"));
+    }
 }
