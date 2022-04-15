@@ -25,7 +25,7 @@ public class FeatureToogleController:ControllerBase
     [Route("{name}")]
     public IActionResult GetFeatureToogle(string name)
     {
-        return Ok();
+        return Ok(false);
     }
     
     [HttpPut]

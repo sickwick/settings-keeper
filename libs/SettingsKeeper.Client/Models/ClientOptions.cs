@@ -7,4 +7,6 @@ public class ClientOptions
 {
     [Required] public string BaseUrl { get; set; }
     [Required] public string ServerPath { get; set; }
+
+    [Required] public string FeatureTooglePath { get; set; }
 }
