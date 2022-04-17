@@ -13,29 +13,21 @@ namespace SettingsKeeper.Api.Controllers;
 public class SettingsController:ControllerBase
 {
     private readonly ISettingsService _settingsService;
-    private readonly IRedisProvider _cacheProvider;
-    private readonly IMongoDbProvider _mongoDbProvider;
-
     public SettingsController(
-        ISettingsService settingsService, 
-        IRedisProvider cacheProvider,
-        IMongoDbProvider mongoDbProvider,
-        IRabbitMqService rabbitMqService)
+        ISettingsService settingsService)
     {
         _settingsService = settingsService;
-        _cacheProvider = cacheProvider;
-        _mongoDbProvider = mongoDbProvider;
     }
 
     [HttpGet]
     [Route("{name}")]
-    public async Task<IActionResult> GetSetting(string name)
+    public async Task<IActionResult> GetSetting(string name, CancellationToken cancellationToken)
     {
-        return Ok();
+        var response = await _settingsService.GetSettingsAsync(name, cancellationToken);
+        return Ok(response);
     }
     
     [HttpPost]
-    [Route("{name}")]
     public IActionResult AddSetting([FromBody] string settings)
     {
         return Ok();
@@ -52,7 +44,6 @@ public class SettingsController:ControllerBase
     [Route("{name}")]
     public async Task<IActionResult> DeleteSetting(string name)
     {
-        var res = await _cacheProvider.RemoveAsync(name);
-        return Ok(res);
+        return Ok();
     }
 }

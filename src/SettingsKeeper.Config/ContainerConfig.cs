@@ -15,6 +15,8 @@ public static class ContainerConfig
         services.AddSingleton<IFeatureToogleProvider, FeatureToogleProvider>();
         services.AddSingleton<IClientsService, ClientsService>();
 
+        services.AddSingleton<ISettingsProvider, SettingsProvider>();
+
         return services;
     }
 }

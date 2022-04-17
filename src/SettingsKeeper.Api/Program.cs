@@ -1,8 +1,13 @@
+using System.Net;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Diagnostics;
+using SettingsKeeper.Api.Models;
 using SettingsKeeper.Cache.Extensions;
 using SettingsKeeper.Config;
 using SettingsKeeper.MongoDb.Extensions;
 using SettingsKeeper.Provider.Models;
 using SettingsKeeper.RabbitMQ.Extensions;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +25,7 @@ services.AddSwaggerGen();
 services.AddSettingsKeeperCache(configuration);
 services.AddMongoDb(configuration);
 services.AddRabbitMq(configuration);
+services.AddHttpContextAccessor();
 
 services.AddApplicationServices();
 
@@ -32,6 +38,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler((options) =>
+{
+    options.Run(async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.ContentType = MediaTypeNames.Application.Json;
+        var ex = context.Features.Get<IExceptionHandlerFeature>();
+        if (ex != null)
+        {
+            var err = new ErrorViewModel()
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+                Message = ex.Error.Message
+            };
+            var respose = JsonSerializer.Serialize(err);
+            await context.Response.WriteAsync(respose).ConfigureAwait(false);
+        }
+    });
+});
 // app.UseHttpsRedirection();
 //
 // app.UseAuthorization();
