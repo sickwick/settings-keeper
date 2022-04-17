@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -64,5 +65,12 @@ internal sealed class MongoDbProvider : IMongoDbProvider
         _logger.LogInformation($"Получено значение переключателя: {result.Name}", result);
 
         return result;
+    }
+
+    public async Task AddElementAsync<T>(string collectionName, T data, CancellationToken cancellationToken)
+    {
+        var content = JsonSerializer.Serialize(data);
+        var collection = GetMongoCollection<T>(collectionName);
+        await collection.InsertOneAsync(data, new InsertOneOptions(), cancellationToken);
     }
 }

@@ -1,10 +1,13 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
 using SettingsKeeper.MongoDb.Abstract;
 using SettingsKeeper.RabbitMQ.Abstract;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SettingsKeeper.Api.Controllers;
 
@@ -28,9 +31,11 @@ public class SettingsController:ControllerBase
     }
     
     [HttpPost]
-    public IActionResult AddSetting([FromBody] string settings)
+    public async Task<IActionResult> AddSetting([FromQuery] string name, [FromBody] JsonElement settings, CancellationToken cancellationToken)
     {
-        return Ok();
+        var set = JsonSerializer.Serialize(settings);
+        await _settingsService.AddSettingsAsync(name, set, cancellationToken);
+        return NoContent();
     }
     
     [HttpPut]

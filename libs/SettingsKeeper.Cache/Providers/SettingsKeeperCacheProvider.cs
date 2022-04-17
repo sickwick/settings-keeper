@@ -23,12 +23,15 @@ public class SettingsKeeperCacheProvider: IRedisProvider
         return JsonConvert.DeserializeObject<T>(data);
     }
 
-    public async Task SetAsync<T>(string cacheKey, T data)
+    public async Task SetAsync<T>(string cacheKey, T data, int? lifeTime = null)
     where T: class
     {
         var stringData = JsonConvert.SerializeObject(data);
+        var a = DateTime.Now.AddHours(1);
         var resultData = Encoding.UTF8.GetBytes(stringData);
-        await _database.StringSetAsync(cacheKey, resultData, TimeSpan.FromHours(DefaultCacheLifeTime));
+        if (lifeTime is null)
+            lifeTime = DefaultCacheLifeTime;
+        await _database.StringSetAsync(cacheKey, resultData, TimeSpan.FromHours(lifeTime.Value));
     }
 
     public async Task<bool> RemoveAsync(string cacheKey)

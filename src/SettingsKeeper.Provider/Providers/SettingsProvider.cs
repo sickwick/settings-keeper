@@ -17,4 +17,9 @@ public class SettingsProvider: ISettingsProvider
     {
         return await _mongoDbProvider.GetElementByNameAsync<Settings>(name, collectionName, cancellationToken);
     }
+
+    public async Task AddSettingsAsync(string collectionName, Settings settings, CancellationToken cancellationToken)
+    {
+        await _mongoDbProvider.AddElementAsync(collectionName, settings, cancellationToken);
+    }
 }

@@ -14,4 +14,6 @@ public interface IMongoDbProvider
 
     Task<T> GetElementByFilterAsync<T>(string collectionName, FilterDefinition<T> filter,
         CancellationToken cancellationToken) where T : ISimpleCollection;
+
+    Task AddElementAsync<T>(string collectionName, T data, CancellationToken cancellationToken);
 }
