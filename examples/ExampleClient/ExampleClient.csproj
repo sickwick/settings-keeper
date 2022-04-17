@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\libs\SettingsKeeper.Client\SettingsKeeper.Client.csproj" />
+      <ProjectReference Include="..\..\src\SettingsKeeper.Api\SettingsKeeper.Api.csproj" />
     </ItemGroup>
 
 </Project>

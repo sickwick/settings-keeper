@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
 using SettingsKeeper.Provider.Abstract;
@@ -49,7 +50,7 @@ public class SettingsService: ISettingsService
 
     public async Task AddSettingsAsync(string name, string settings, CancellationToken cancellationToken)
     {
-        var request = new Settings() { Name = name, AppSettings = settings };
+        var request = new Settings() { Name = name, AppSettings = settings};
         var collectionName = _options.CollectionName;
         if(string.IsNullOrEmpty(collectionName))
             throw new ArgumentNullException(nameof(collectionName), "Необходимо указать название коллекции");

@@ -12,7 +12,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace SettingsKeeper.Api.Controllers;
 
 [ApiController]
-[Route("")]
+[Route("[controller]")]
 public class SettingsController:ControllerBase
 {
     private readonly ISettingsService _settingsService;

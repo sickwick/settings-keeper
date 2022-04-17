@@ -34,7 +34,6 @@ public class DefaultController: ControllerBase
     [Route("test")]
     public IActionResult Test(bool isEnabled, [FromServices] IConfiguration configuration, [FromServices]IServiceProvider provider)
     {
-        var a = new AppsettingsProvider();
-        return Ok(a.test(isEnabled, configuration, provider));
+        return Ok();
     }
 }

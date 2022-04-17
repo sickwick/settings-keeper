@@ -22,8 +22,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddRabbitMqForClient(configuration);
         services.AddSingleton<IRabbitMqResult, SettingsKeeperService>();
-        services.Configure<ClientOptions>(configuration.GetSection("Keeper:SettingsKeeperClient"));
-        services.Configure<RabbitClientOptions>(configuration.GetSection("Keeper:RabbitClient"));
+        services.Configure<ClientOptions>(configuration.GetSection("SettingsKeeperClient"));
+        services.Configure<RabbitClientOptions>(configuration.GetSection("RabbitClient"));
 
         services.AddHttpClient();
         
