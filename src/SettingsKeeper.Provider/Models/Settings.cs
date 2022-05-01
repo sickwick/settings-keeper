@@ -10,6 +10,8 @@ public class Settings: ISimpleCollection
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string Name { get; set; }
+    
+    public string ServiceName { get; set; }
 
     public string AppSettings { get; set; }
 }

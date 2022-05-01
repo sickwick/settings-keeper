@@ -4,4 +4,6 @@ public interface ISimpleCollection
 {
     string Id { get; set; }
     string Name { get; set; }
+
+    string ServiceName { get; set; }
 }

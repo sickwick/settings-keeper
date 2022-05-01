@@ -31,8 +31,8 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<RabbitMqListener>();
 
         services.AddFeatureManagement();
-        services.AddSingleton<IFeatureDefinitionProvider, FeatureDefinitionProvider>();
-        services.AddSingleton<IFeatureToogleService, FeatureToogleService>();
+        // services.AddSingleton<IFeatureDefinitionProvider, FeatureDefinitionProvider>();
+        // services.AddSingleton<IFeatureToogleService, FeatureToogleService>();
     }
 
     private static void AddHttpClient(this IServiceCollection services)

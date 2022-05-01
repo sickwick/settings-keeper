@@ -1,6 +1,8 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using SettingsKeeper.RabbitMQ.Abstract;
+using SettingsKeeper.RabbitMQ.Models;
 
 namespace SettingsKeeper.Client.Services;
 
@@ -12,8 +14,18 @@ public class SettingsKeeperService : IRabbitMqResult
     {
         _logger = logger;
     }
-    public void UseRabbitMessageResult(string message)
+    public void UseRabbitMessageResult(RabbitMessage message)
     {
-        Console.WriteLine(message);
+        string workingDirectory = Environment.CurrentDirectory;
+        var content = JsonSerializer.Serialize(message.Content);
+        switch (message.Version)
+        {
+            case "settings":
+                File.WriteAllText(Path.Combine(workingDirectory,"settings.json"), content);
+                break;
+            case "featureToggle":
+                File.WriteAllText(Path.Combine(workingDirectory,"featureToggles.json"), content);
+                break;
+        }
     }
 }

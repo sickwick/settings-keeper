@@ -40,15 +40,18 @@ public class SettingsController:ControllerBase
     
     [HttpPut]
     [Route("{name}")]
-    public IActionResult EditSetting([FromBody] string settings)
+    public async Task<IActionResult> EditSetting(string name, [FromBody] JsonElement settings, CancellationToken cancellationToken)
     {
-        return Ok();
+        var set = JsonSerializer.Serialize(settings);
+        await _settingsService.ChangeSettingsAsync(name, set, cancellationToken);
+        return NoContent();
     }
     
     [HttpDelete]
     [Route("{name}")]
-    public async Task<IActionResult> DeleteSetting(string name)
+    public async Task<IActionResult> DeleteSetting(string name, CancellationToken cancellationToken)
     {
-        return Ok();
+        await _settingsService.RemoveSettingsAsync(name, cancellationToken);
+        return NoContent();
     }
 }

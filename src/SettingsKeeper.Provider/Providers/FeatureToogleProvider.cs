@@ -23,4 +23,27 @@ public class FeatureToogleProvider: IFeatureToogleProvider
             cancellationToken);
         return featueToogle;
     }
+
+    public async Task<IEnumerable<FeatureToogle>> GetAllFeatureToogles(string serviceName, CancellationToken cancellationToken)
+    {
+        var featureToogles = await _mongoProvider.GetAllElementsByServiceNameAsync<FeatureToogle>(_featureToogleSettings.CollectionName, serviceName, cancellationToken);
+        return featureToogles;
+    }
+
+    public async Task AddFeatureToggle(FeatureToogle content, CancellationToken cancellationToken)
+    {
+        await _mongoProvider.AddElementAsync(_featureToogleSettings.CollectionName, content,
+            cancellationToken);
+    }
+
+    public async Task EditFeatureToggle(FeatureToogle content, CancellationToken cancellationToken)
+    {
+        await _mongoProvider.SetElementAsync(_featureToogleSettings.CollectionName, content.Name, content,
+            cancellationToken);
+    }
+
+    public async Task RemoveFeatureToggleAsync(string serviceName, CancellationToken cancellationToken)
+    {
+        await _mongoProvider.RemoveElementAsync<FeatureToogle>(_featureToogleSettings.CollectionName, serviceName, cancellationToken);
+    }
 }

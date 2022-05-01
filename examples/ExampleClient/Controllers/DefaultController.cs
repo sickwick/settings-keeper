@@ -1,10 +1,6 @@
 using ExampleClient.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
-using Newtonsoft.Json;
-using System.IO;
-using Microsoft.Extensions.Configuration.Memory;
-using SettingsKeeper.Client.Providers;
 using SO=System.IO.File;
 
 namespace ExampleClient.Controllers;
@@ -32,8 +28,8 @@ public class DefaultController: ControllerBase
 
     [HttpGet]
     [Route("test")]
-    public IActionResult Test(bool isEnabled, [FromServices] IConfiguration configuration, [FromServices]IServiceProvider provider)
+    public IActionResult Test([FromServices] IConfiguration configuration)
     {
-        return Ok();
+        return Ok(configuration.GetValue<string>("TestSettings:Color"));
     }
 }

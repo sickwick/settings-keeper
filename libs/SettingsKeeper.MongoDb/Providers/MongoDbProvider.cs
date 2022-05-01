@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SettingsKeeper.MongoDb.Abstract;
+using SettingsKeeper.MongoDb.Exceptions;
 using SettingsKeeper.MongoDb.Models;
 
 namespace SettingsKeeper.MongoDb.Providers;
@@ -68,9 +69,54 @@ internal sealed class MongoDbProvider : IMongoDbProvider
     }
 
     public async Task AddElementAsync<T>(string collectionName, T data, CancellationToken cancellationToken)
+        where T : ISimpleCollection
     {
-        var content = JsonSerializer.Serialize(data);
+        try
+        {
+            _ = await GetElementByNameAsync<T>(data.Name, collectionName, cancellationToken);
+            throw new NameContainsException();
+        }
+        catch (NameContainsException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug("Подавленная ошибка при добавлении записи");
+        }
+        
         var collection = GetMongoCollection<T>(collectionName);
         await collection.InsertOneAsync(data, new InsertOneOptions(), cancellationToken);
+    }
+
+    public async Task<IEnumerable<T>> GetAllElementsByServiceNameAsync<T>(string collectionName, string name, CancellationToken cancellationToken)
+        where T : ISimpleCollection
+    {
+        var collection = GetMongoCollection<T>(collectionName);
+        var cursor = await collection.FindAsync(Builders<T>.Filter.Eq(c=>c.ServiceName, name), cancellationToken: cancellationToken);
+        return await cursor.ToListAsync(cancellationToken);
+    }
+
+    public async Task SetElementAsync<T>(string collectionName, string name, T data, CancellationToken cancellationToken)
+        where T : ISimpleCollection
+    {
+        var collection = GetMongoCollection<T>(collectionName);
+        var getId = await GetElementByFilterAsync<T>(collectionName, Builders<T>.Filter.Eq(c=>c.Name, name), cancellationToken);
+        data.Id = getId.Id;
+        var result = await collection.ReplaceOneAsync(
+            Builders<T>.Filter.Eq(c => c.Id, getId.Id), 
+            data,
+            cancellationToken: cancellationToken);
+        
+        _logger.LogInformation(string.Format("найдено по соответствию: {0}; обновлено: {1}", result.MatchedCount, result.ModifiedCount));
+    }
+
+    public async Task RemoveElementAsync<T>(string collectionName, string name, CancellationToken cancellationToken)
+        where T : ISimpleCollection
+    {
+        var collection = GetMongoCollection<T>(collectionName);
+        await collection.DeleteOneAsync(Builders<T>.Filter.Eq(c=>c.Name, name), cancellationToken);
+        
+        _logger.LogInformation($"Удален элемент.(name: {name})");
     }
 }

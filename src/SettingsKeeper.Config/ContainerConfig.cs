@@ -10,7 +10,7 @@ public static class ContainerConfig
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IFeatureToogleService, FeatureToogleService>();
+        services.AddSingleton<IFeatureToggleService, FeatureToggleService>();
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IFeatureToogleProvider, FeatureToogleProvider>();
         services.AddSingleton<IClientsService, ClientsService>();

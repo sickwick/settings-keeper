@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureAppConfiguration((context, config) =>
 {
     config.AddSettingsFile("settings.json",  reloadOnChange: true);
+    config.AddFeatureToggleFile("featureToggles.json",  reloadOnChange: true);
     config.Build();
 });
 

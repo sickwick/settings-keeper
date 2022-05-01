@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using SettingsKeeper.Cache.Abstract;
 using SettingsKeeper.Core.Abstract;
@@ -44,6 +45,11 @@ public class ClientsService: IClientsService
     public void SendMessageToClient<T>(string name, T message)
     where T: class
     {
+        if (message is JsonDocument json)
+        {
+            var data = JsonSerializer.Serialize(json);
+            _rabbitMqService.SendMessage(name, data);
+        }
         _rabbitMqService.SendMessage(name, message);
     }
     

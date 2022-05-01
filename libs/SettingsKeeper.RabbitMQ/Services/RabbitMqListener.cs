@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using System.Text.Unicode;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,11 +39,10 @@ public class RabbitMqListener: BackgroundService
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += (ch, ea) =>
         {
-            var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-			
-            // Каким-то образом обрабатываем полученное сообщение
-            Debug.WriteLine($"Получено сообщение: {content}");
-            _result.UseRabbitMessageResult(content);
+            var res = JsonDocument.Parse(ea.Body.ToArray());
+            var data = JsonSerializer.Deserialize<RabbitMessage>(res.RootElement.GetString());
+
+            _result.UseRabbitMessageResult(data);
 
             _channel.BasicAck(ea.DeliveryTag, false);
         };

@@ -1,15 +1,17 @@
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using SettingsKeeper.MongoDb.Abstract;
 
 namespace SettingsKeeper.Provider.Models;
 
 public class FeatureToogle: ISimpleCollection
 {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string Name { get; set; }
-
-    public bool Enabled { get; set; }
-
-    public DateTime? StartDate { get; set; }
     
-    public DateTime? EndDate { get; set; }
+    public string ServiceName { get; set; }
+
+    public string Content { get; set; }
 }

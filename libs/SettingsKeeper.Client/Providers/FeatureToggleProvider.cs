@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using SettingsKeeper.Client.Models;
@@ -6,7 +7,7 @@ using SettingsKeeper.Client.Utils;
 
 namespace SettingsKeeper.Client.Providers;
 
-public class AppsettingsProvider: JsonConfigurationProvider
+public class FeatureToggleProvider: JsonConfigurationProvider
 {
     public override void Load()
     {
@@ -20,7 +21,10 @@ public class AppsettingsProvider: JsonConfigurationProvider
         
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(config.BaseUrl);
-        var request = UrlUtils.BuildPath(config.SettingsPath, config.AppName);
+        QueryBuilder b = new QueryBuilder();
+        b.Add("name", config.AppName);
+        var c = b.ToQueryString();
+        var request = UrlUtils.BuildPath(config.FeatureTooglePath, c.ToString());
         var response = httpClient.GetAsync(request).GetAwaiter().GetResult();
 
         if (!response.IsSuccessStatusCode)
@@ -33,7 +37,7 @@ public class AppsettingsProvider: JsonConfigurationProvider
         base.Load(stream);
     }
 
-    public AppsettingsProvider(JsonConfigurationSource source) : base(source)
+    public FeatureToggleProvider(JsonConfigurationSource source) : base(source)
     {
     }
 }

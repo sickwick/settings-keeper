@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SettingsKeeper.Core.Abstract;
 
@@ -29,9 +30,8 @@ public class ClientsController: ControllerBase
         return Ok();
     }
 
-    [HttpGet]
-    [Route("message")]
-    public IActionResult SendMessageToClient([FromQuery] string name, [FromQuery] string message)
+    [HttpPost]
+    public IActionResult SendMessageToClient([FromQuery] string name, [FromBody] JsonDocument message)
     {
         _clientsService.SendMessageToClient(name, message);
         return NoContent();
